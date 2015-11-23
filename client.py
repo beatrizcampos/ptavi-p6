@@ -8,7 +8,7 @@ import socket
 import sys
 
 # Cliente UDP simple.
-try: 
+try:
 
     METHOD = sys.argv[1]
     RECEIVER = sys.argv[2].split('@')[0]
@@ -31,18 +31,15 @@ my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
 data = my_socket.recv(1024)
 
 # Metodo de asentimiento. Se envia de manera automática
-rcv_answer = data.split('\r\n\r\n')[0:-1]
-
+rcv_answer = data.decode('utf-8').split('\r\n\r\n')[0:-1]
 if rcv_answer == ['SIP/2.0 100 Trying', 'SIP/2.0 180 Ringing',
                   'SIP/2.0 200 OK']:
     METHOD = 'ACK'
-    LINE_ACK = METOD + ' sip:' + RECEPTOR + '@' + IP_R + ' SIP/2.0\r\n\r\n'
+    LINE_ACK = METHOD + ' sip:' + RECEIVER + '@' + IP + ' SIP/2.0\r\n\r\n'
     print("Enviando: " + LINE_ACK)
-    my_socket.send(LINE_ACK)
+    my_socket.send(bytes(LINE_ACK, 'utf-8'))
     data = my_socket.recv(1024)
     print(data)
-
-
 
 print('Recibido -- ', data.decode('utf-8'))
 print("Terminando socket...")
