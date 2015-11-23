@@ -43,6 +43,7 @@ if rcv_answer == ['SIP/2.0 100 Trying', 'SIP/2.0 180 Ringing',
     print(data)
 
 
+
 print('Recibido -- ', data.decode('utf-8'))
 print("Terminando socket...")
 
