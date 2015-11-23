@@ -6,6 +6,7 @@ Clase (y programa principal) para un servidor de eco en UDP simple
 
 import socketserver
 import sys
+import os
 
 try:
 
@@ -47,6 +48,14 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                 self.wfile.write(bytes(answer, 'utf-8'))
                 print("Finish. . .")
 
+            elif method_client == 'ACK':
+                aAejecutar = './mp32rtp -i' + IP_CLIENT + '-p 23032 < ' +FILE
+                print("Vamos a ejecutar" , aAejecutar)
+                os.system(aAejecutar)
+
+            elif method_client != ('INVITE' or 'ACK' or 'BYE'):
+                answer = ("SIP/2.0 405 Method Not Allowed" +  '\r\n\r\n')
+                self.wfile.write(bytes(answer, 'utf-8'))
             else:
                 answer = ("SIP/2.0 400 Bad Request" + '\r\n\r\n')
                 self.wfile.write(bytes(answer, 'utf-8'))
