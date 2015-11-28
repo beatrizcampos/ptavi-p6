@@ -39,8 +39,8 @@ class EchoHandler(socketserver.DatagramRequestHandler):
             print("El cliente nos manda " + line.decode('utf-8'))
             if method_client == 'INVITE':
                 rcv_answer = ("SIP/2.0 100 Trying" + '\r\n\r\n' +
-                             "SIP/2.0 180 Ringing" + '\r\n\r\n' +
-                             "SIP/2.0 200 OK" + '\r\n\r\n')
+                              "SIP/2.0 180 Ringing" + '\r\n\r\n' +
+                              "SIP/2.0 200 OK" + '\r\n\r\n')
                 self.wfile.write(bytes(rcv_answer, 'utf-8'))
 
             elif method_client == 'BYE':
@@ -49,12 +49,13 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                 print("Finish. . .")
 
             elif method_client == 'ACK':
-                aEjecutar = ('./mp32rtp -i ' + IP_CLIENT + ' -p 23032 < ' + FILE)
-                print("Vamos a ejecutar" , aEjecutar)
+                aEjecutar = ('./mp32rtp -i ' +
+                             IP_CLIENT + ' -p 23032 < ' + FILE)
+                print("Vamos a ejecutar", aEjecutar)
                 os.system(aEjecutar)
 
             elif method_client != ('INVITE' or 'ACK' or 'BYE'):
-                answer = ("SIP/2.0 405 Method Not Allowed" +  '\r\n\r\n')
+                answer = ("SIP/2.0 405 Method Not Allowed" + '\r\n\r\n')
                 self.wfile.write(bytes(answer, 'utf-8'))
             else:
                 answer = ("SIP/2.0 400 Bad Request" + '\r\n\r\n')
