@@ -37,7 +37,11 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                 break
 
             print("El cliente nos manda " + line.decode('utf-8'))
-            if method_client == 'INVITE':
+            if not method_client in methods:
+                answer = ("SIP/2.0 405 Method Not Allowed" + '\r\n\r\n')
+                self.wfile.write(bytes(answer, 'utf-8'))
+
+            elif method_client == 'INVITE':
                 rcv_answer = ("SIP/2.0 100 Trying" + '\r\n\r\n' +
                               "SIP/2.0 180 Ringing" + '\r\n\r\n' +
                               "SIP/2.0 200 OK" + '\r\n\r\n')
@@ -54,16 +58,16 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                 print("Vamos a ejecutar", aEjecutar)
                 os.system(aEjecutar)
 
-            elif method_client != ('INVITE' or 'ACK' or 'BYE'):
-                answer = ("SIP/2.0 405 Method Not Allowed" + '\r\n\r\n')
-                self.wfile.write(bytes(answer, 'utf-8'))
             else:
                 answer = ("SIP/2.0 400 Bad Request" + '\r\n\r\n')
                 self.wfile.write(bytes(answer, 'utf-8'))
 
 
 if __name__ == "__main__":
-    # Creamos servidor de eco y escuchamos
+    methods = ['INVITE', 'ACK', 'BYE']
+    """
+    Creamos servidor eco y escuchamos
+    """
     serv = socketserver.UDPServer(((IP, int(PORT))), EchoHandler)
     print("Listening...")
     serv.serve_forever()
