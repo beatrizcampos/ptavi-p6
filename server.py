@@ -64,10 +64,10 @@ class EchoHandler(socketserver.DatagramRequestHandler):
 
 
 if __name__ == "__main__":
-    methods = ['INVITE', 'ACK', 'BYE']
     """
     Creamos servidor eco y escuchamos
     """
+    methods = ['INVITE', 'ACK', 'BYE']
     serv = socketserver.UDPServer(((IP, int(PORT))), EchoHandler)
     print("Listening...")
     serv.serve_forever()
